@@ -105,49 +105,100 @@
   <script type="text/babel">
     const { useState, useEffect, useRef } = React;
 
-    // --- Official Tech SVG Icons ---
-    const TechIcons = {
-      cpp: (
-        <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
-          <path d="M22.394 6.784a1.865 1.865 0 0 0-.918-.752L13.197.808a2.316 2.316 0 0 0-2.394 0L2.524 6.032a1.865 1.865 0 0 0-.918.752c-.378.53-.578 1.16-.574 1.8v10.832c-.004.64.196 1.27.574 1.8.25.352.57.625.918.752l8.279 5.224a2.316 2.316 0 0 0 2.394 0l8.279-5.224c.348-.127.668-.4.918-.752.378-.53.578-1.16.574-1.8V8.584c.004-.64-.196-1.27-.574-1.8zm-9.87 9.176c-2.33 0-3.95-1.74-3.95-3.96 0-2.23 1.62-3.96 3.95-3.96 1.54 0 2.76.77 3.39 1.95l-1.63.95c-.34-.63-.98-1.02-1.76-1.02-1.29 0-2.14.98-2.14 2.08s.85 2.08 2.14 2.08c.78 0 1.42-.39 1.76-1.02l1.63.95c-.63 1.18-1.85 1.95-3.39 1.95zm5.55-3.13h-1.04v1.04h-.83v-1.04h-1.04v-.83h1.04v-1.04h.83v1.04h1.04v.83zm3.32 0h-1.04v1.04h-.83v-1.04h-1.04v-.83h1.04v-1.04h.83v1.04h1.04v.83z" />
-        </svg>
-      ),
-      python: (
-        <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
-          <path d="M11.914 0C5.82 0 6.2 2.656 6.2 2.656l.006 2.75h5.808v.825H3.83S0 5.76 0 11.904c0 6.14 3.34 5.94 3.34 5.94h1.994v-2.793s-.11-3.34 3.28-3.34h5.632s3.172.05 3.172-3.07V3.07S17.973 0 11.914 0zM8.7 1.838a1.05 1.05 0 1 1 0 2.1 1.05 1.05 0 0 1 0-2.1zm3.386 22.162c6.094 0 5.714-2.656 5.714-2.656l-.006-2.75H11.99v-.825h8.183s3.83.47 3.83-5.674c0-6.14-3.34-5.94-3.34-5.94h-1.994v2.793s.11 3.34-3.28 3.34H9.747s-3.172-.05-3.172 3.07v5.568s-.555 3.07 5.504 3.07zm3.214-1.838a1.05 1.05 0 1 1 0-2.1 1.05 1.05 0 0 1 0-2.1z" />
-        </svg>
-      ),
-      javascript: (
-        <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
-          <path d="M0 0h24v24H0V0zm22.034 18.276c-.175-1.095-.888-2.015-3.003-2.873-.736-.345-1.554-.621-1.797-1.025-.112-.19-.138-.42-.112-.647.086-.777.924-.897 1.407-.811.458.077.872.336 1.079.742.699-.457 1.104-.725 1.545-1.01-.363-.57-.751-.959-1.321-1.235-.742-.363-1.632-.432-2.503-.302-1.01.147-1.908.76-2.227 1.735-.552 1.631.389 3.047 2.158 3.824 1.027.466 1.709.777 1.864 1.347.199.786-.397 1.33-1.571 1.321-.898-.017-1.467-.397-1.907-1.062-.604.38-1.053.665-1.614 1.027.535.95 1.251 1.571 2.218 1.839 1.545.431 3.236.198 4.074-.751.725-.829.837-1.899.667-2.778zM10.364 12.01h2.157v7.241c0 1.657-.026 2.684-.57 3.392-.664.863-1.873 1.096-3.081.829-.717-.156-1.338-.561-1.744-1.157.544-.337.993-.613 1.502-.932.268.414.544.708 1.01.811.458.104.975-.025 1.182-.509.121-.294.138-.769.138-1.416V12.01z" />
-        </svg>
-      ),
-      react: (
-        <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
-          <path d="M12 9.062a2.938 2.938 0 1 0 0 5.876 2.938 2.938 0 0 0 0-5.876zm0-7.874c-4.437 0-8.832 2.073-11.442 5.568 2.61 3.495 7.005 5.568 11.442 5.568 4.437 0 8.832-2.073 11.442-5.568-2.61-3.495-7.005-5.568-11.442-5.568zm0 14.562c-4.437 0-8.832 2.073-11.442 5.568 2.61 3.495 7.005 5.568 11.442 5.568 4.437 0 8.832-2.073 11.442-5.568-2.61-3.495-7.005-5.568-11.442-5.568z" />
-        </svg>
-      ),
-      tailwind: (
-        <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
-          <path d="M12.001 4.8c-3.2 0-5.2 1.6-6 4.8 1.2-1.6 2.6-2.2 4.2-1.8.913.228 1.565.89 2.288 1.624C13.666 10.618 15.027 12 18.001 12c3.2 0 5.2-1.6 6-4.8-1.2 1.6-2.6 2.2-4.2 1.8-.913-.228-1.565-.89-2.288-1.624C16.337 6.182 14.976 4.8 12.001 4.8zm-6 7.2c-3.2 0-5.2 1.6-6 4.8 1.2-1.6 2.6-2.2 4.2-1.8.913.228 1.565.89 2.288 1.624 1.177 1.194 2.538 2.576 5.512 2.576 3.2 0 5.2-1.6 6-4.8-1.2 1.6-2.6 2.2-4.2 1.8-.913-.228-1.565-.89-2.288-1.624C10.337 13.382 8.976 12 6.001 12z" />
-        </svg>
-      ),
-      git: (
-        <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
-          <path d="M23.546 10.93L13.067.452c-.604-.603-1.582-.603-2.188 0L8.708 2.627l2.76 2.76c.645-.215 1.379-.07 1.889.441.516.515.658 1.258.438 1.9l3.05 3.053c.642-.222 1.385-.08 1.9.438.746.746.746 1.956 0 2.702-.746.746-1.956.746-2.702 0-.518-.517-.66-1.259-.44-1.9l-2.85-2.85v7.24c.215.1.419.24.596.417.746.746.746 1.956 0 2.702-.746.746-1.956.746-2.702 0-.746-.746-.746-1.956 0-2.702.21-.21.455-.353.717-.441v-7.25c-.26-.089-.505-.231-.717-.44-.523-.523-.662-1.274-.435-1.92l-2.73-2.73-6.52 6.52c-.604.604-.604 1.581 0 2.185l10.48 10.478c.604.604 1.582.604 2.187 0l10.478-10.478c.605-.604.605-1.582 0-2.186z" />
-        </svg>
-      ),
-      dsa: (
-        <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-          <circle cx="6" cy="6" r="3" />
-          <circle cx="18" cy="6" r="3" />
-          <circle cx="12" cy="18" r="3" />
-          <line x1="8.5" y1="7.5" x2="15.5" y2="7.5" />
-          <line x1="7.5" y1="8.5" x2="10.5" y2="15.5" />
-          <line x1="16.5" y1="8.5" x2="13.5" y2="15.5" />
-        </svg>
-      ),
-    };
+    // --- Easter Egg: Custom Cursor Follower & Trailing Light Spark ---
+    function CursorFollower() {
+      const [pos, setPos] = useState({ x: -100, y: -100 });
+      const [trailing, setTrailing] = useState({ x: -100, y: -100 });
+      const [visible, setVisible] = useState(false);
+      const [hovered, setHovered] = useState(false);
+
+      useEffect(() => {
+        let frameId;
+        let targetX = -100;
+        let targetY = -100;
+        let currX = -100;
+        let currY = -100;
+
+        const onMouseMove = (e) => {
+          targetX = e.clientX;
+          targetY = e.clientY;
+          setPos({ x: targetX, y: targetY });
+          setVisible(true);
+
+          const t = e.target;
+          if (
+            t &&
+            (t.tagName === 'BUTTON' ||
+              t.tagName === 'A' ||
+              t.tagName === 'INPUT' ||
+              t.tagName === 'TEXTAREA' ||
+              t.closest('button') ||
+              t.closest('a') ||
+              t.classList.contains('cursor-pointer'))
+          ) {
+            setHovered(true);
+          } else {
+            setHovered(false);
+          }
+        };
+
+        const onMouseLeave = () => setVisible(false);
+
+        window.addEventListener('mousemove', onMouseMove);
+        document.addEventListener('mouseleave', onMouseLeave);
+
+        const render = () => {
+          currX += (targetX - currX) * 0.18;
+          currY += (targetY - currY) * 0.18;
+          setTrailing({ x: currX, y: currY });
+          frameId = requestAnimationFrame(render);
+        };
+        render();
+
+        return () => {
+          cancelAnimationFrame(frameId);
+          window.removeEventListener('mousemove', onMouseMove);
+          document.removeEventListener('mouseleave', onMouseLeave);
+        };
+      }, []);
+
+      if (!visible) return null;
+
+      return (
+        <React.Fragment>
+          {/* Outer Emerald Glowing Ring */}
+          <div
+            className="fixed pointer-events-none z-50 rounded-full hidden sm:block transform-gpu"
+            style={{
+              left: `${trailing.x}px`,
+              top: `${trailing.y}px`,
+              width: hovered ? '48px' : '30px',
+              height: hovered ? '48px' : '30px',
+              transform: 'translate(-50%, -50%)',
+              border: hovered ? '1.5px solid rgba(163, 230, 53, 0.8)' : '1px solid rgba(16, 185, 129, 0.45)',
+              backgroundColor: hovered ? 'rgba(16, 185, 129, 0.08)' : 'rgba(16, 185, 129, 0.02)',
+              boxShadow: hovered
+                ? '0 0 20px rgba(163, 230, 53, 0.4), inset 0 0 10px rgba(16, 185, 129, 0.2)'
+                : '0 0 12px rgba(16, 185, 129, 0.25)',
+              transition: 'width 0.2s ease, height 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease',
+            }}
+          />
+          {/* Inner Lime Core Spark */}
+          <div
+            className="fixed pointer-events-none z-50 rounded-full hidden sm:block transform-gpu"
+            style={{
+              left: `${pos.x}px`,
+              top: `${pos.y}px`,
+              width: '5px',
+              height: '5px',
+              transform: 'translate(-50%, -50%)',
+              backgroundColor: '#a3e635',
+              boxShadow: '0 0 8px #a3e635, 0 0 14px #10b981',
+            }}
+          />
+        </React.Fragment>
+      );
+    }
 
     // --- Matrix Dot Canvas Component ---
     function MatrixDotCanvas() {
@@ -307,7 +358,7 @@
       );
     }
 
-    // --- Floating Navbar ---
+    // --- Floating Frosted-Glass Navbar ---
     function Navbar() {
       const [isScrolled, setIsScrolled] = useState(false);
       const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -330,7 +381,7 @@
       }, []);
 
       return (
-        <header className="fixed top-0 left-0 right-0 z-50 px-4 sm:px-6 lg:px-8 pt-3 sm:pt-4 transition-all duration-300">
+        <header className="fixed top-0 left-0 right-0 z-40 px-4 sm:px-6 lg:px-8 pt-3 sm:pt-4 transition-all duration-300">
           <div className="max-w-7xl mx-auto">
             <nav
               className={`relative rounded-2xl transition-all duration-300 border ${
@@ -389,10 +440,6 @@
                     href="#contact"
                     className="inline-flex items-center gap-2 text-xs font-mono font-semibold px-3.5 py-2 rounded-xl bg-emerald-950/40 text-emerald-300 border border-emerald-500/30 hover:border-lime-400 hover:text-white hover:bg-emerald-900/40 transition-all duration-200 shadow-sm"
                   >
-                    <svg className="w-3.5 h-3.5 text-lime-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-                      <polyline points="4 17 10 11 4 5" />
-                      <line x1="12" y1="19" x2="20" y2="19" />
-                    </svg>
                     <span>contact.init()</span>
                   </a>
                 </div>
@@ -406,14 +453,11 @@
                   >
                     {mobileMenuOpen ? (
                       <svg className="w-6 h-6 text-lime-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-                        <line x1="18" y1="6" x2="6" y2="18" />
-                        <line x1="6" y1="6" x2="18" y2="18" />
+                        <line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" />
                       </svg>
                     ) : (
                       <svg className="w-6 h-6 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-                        <line x1="3" y1="12" x2="21" y2="12" />
-                        <line x1="3" y1="6" x2="21" y2="6" />
-                        <line x1="3" y1="18" x2="21" y2="18" />
+                        <line x1="3" y1="12" x2="21" y2="12" /><line x1="3" y1="6" x2="21" y2="6" /><line x1="3" y1="18" x2="21" y2="18" />
                       </svg>
                     )}
                   </button>
@@ -430,16 +474,9 @@
                         setActiveLink(link.name);
                         setMobileMenuOpen(false);
                       }}
-                      className={`block px-4 py-2.5 rounded-xl text-sm font-medium transition-colors ${
-                        activeLink === link.name
-                          ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30'
-                          : 'text-slate-300 hover:text-white hover:bg-emerald-500/10'
-                      }`}
+                      className="block px-4 py-2.5 rounded-xl text-sm font-medium text-slate-300 hover:text-white hover:bg-emerald-500/10"
                     >
-                      <div className="flex items-center justify-between">
-                        <span>{link.name}</span>
-                        <span className="text-emerald-500/60 font-mono text-xs">/&gt;</span>
-                      </div>
+                      {link.name}
                     </a>
                   ))}
                 </div>
@@ -511,34 +548,24 @@
                 <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 w-full sm:w-auto pt-2">
                   <a
                     href="#projects"
-                    className="group relative inline-flex items-center justify-center gap-2.5 px-7 py-3.5 rounded-xl font-bold text-sm sm:text-base text-[#0d1117] bg-gradient-to-r from-emerald-400 to-lime-400 hover:from-emerald-300 hover:to-lime-300 shadow-[0_0_25px_rgba(16,185,129,0.45)] hover:shadow-[0_0_35px_rgba(16,185,129,0.7)] transition-all duration-300 hover:-translate-y-1 active:translate-y-0 focus:outline-none focus:ring-2 focus:ring-emerald-400"
+                    className="group relative inline-flex items-center justify-center gap-2.5 px-7 py-3.5 rounded-xl font-bold text-sm sm:text-base text-[#0d1117] bg-gradient-to-r from-emerald-400 to-lime-400 hover:from-emerald-300 hover:to-lime-300 shadow-[0_0_25px_rgba(16,185,129,0.45)] hover:shadow-[0_0_35px_rgba(16,185,129,0.7)] transition-all duration-300 hover:-translate-y-1 active:translate-y-0 focus:outline-none"
                   >
                     <span>View My Projects</span>
-                    <svg className="w-4 h-4 text-[#0d1117] group-hover:translate-x-1 transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
-                      <line x1="5" y1="12" x2="19" y2="12" />
-                      <polyline points="12 5 19 12 12 19" />
+                    <svg className="w-4 h-4 text-[#0d1117] group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
+                      <line x1="5" y1="12" x2="19" y2="12" /><polyline points="12 5 19 12 12 19" />
                     </svg>
                   </a>
 
                   <a
-                    href="#resume"
-                    className="group inline-flex items-center justify-center gap-2.5 px-7 py-3.5 rounded-xl font-semibold text-sm sm:text-base text-emerald-300 hover:text-white bg-[#0d1117]/80 hover:bg-emerald-950/40 border-2 border-emerald-500/35 hover:border-lime-400 backdrop-blur-md shadow-[0_0_15px_rgba(0,0,0,0.5)] transition-all duration-300 hover:-translate-y-1 active:translate-y-0 focus:outline-none focus:ring-2 focus:ring-emerald-400"
+                    href="#contact"
+                    className="group inline-flex items-center justify-center gap-2.5 px-7 py-3.5 rounded-xl font-semibold text-sm sm:text-base text-emerald-300 hover:text-white bg-[#0d1117]/80 hover:bg-emerald-950/40 border-2 border-emerald-500/35 hover:border-lime-400 backdrop-blur-md shadow-[0_0_15px_rgba(0,0,0,0.5)] transition-all duration-300 hover:-translate-y-1"
                   >
-                    <svg className="w-4 h-4 text-lime-400 group-hover:scale-110 group-hover:-translate-y-0.5 transition-all duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-                      <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-                      <polyline points="7 10 12 15 17 10" />
-                      <line x1="12" y1="15" x2="12" y2="3" />
-                    </svg>
-                    <span>Download Resume / CV</span>
+                    <span>Let’s Connect</span>
                   </a>
                 </div>
 
                 <div className="pt-4 flex flex-wrap items-center justify-center sm:justify-start gap-2">
                   <span className="text-xs font-mono text-slate-400 mr-1 flex items-center gap-1.5">
-                    <svg className="w-3.5 h-3.5 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-                      <polyline points="16 18 22 12 16 6" />
-                      <polyline points="8 6 2 12 8 18" />
-                    </svg>
                     <span>stack:</span>
                   </span>
                   {techPills.map((pill, idx) => (
@@ -564,15 +591,7 @@
                         <span className="w-3 h-3 rounded-full bg-yellow-500/80 inline-block"></span>
                         <span className="w-3 h-3 rounded-full bg-emerald-500/80 inline-block"></span>
                       </div>
-                      <div className="flex items-center gap-1 text-[11px] font-mono text-slate-400">
-                        <svg className="w-3.5 h-3.5 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-                          <rect x="4" y="4" width="16" height="16" rx="2" />
-                          <rect x="9" y="9" width="6" height="6" />
-                          <line x1="9" y1="1" x2="9" y2="4" />
-                          <line x1="15" y1="1" x2="15" y2="4" />
-                        </svg>
-                        <span>shalini@ksit-terminal: ~</span>
-                      </div>
+                      <span className="text-[11px] font-mono text-slate-400">shalini@ksit-terminal: ~</span>
                     </div>
 
                     <div className="mt-4 space-y-3 font-mono text-xs sm:text-sm text-slate-300">
@@ -591,35 +610,16 @@
                         <span className="text-emerald-300">cat goals.json</span>
                       </div>
                       <div className="pl-4 bg-[#0d1117]/80 rounded-lg p-3 border border-emerald-500/20 text-xs space-y-1">
-                        <div className="text-slate-400">{"{"}</div>
+                        <div>{"{"}</div>
                         <div className="pl-3 text-slate-300">
-                          <span className="text-lime-300">"status"</span>: <span className="text-emerald-300">"Seeking Internships"</span>,
+                          <span className="text-lime-300">"status"</span>: <span className="text-emerald-300">"Open for Internships"</span>,
                         </div>
                         <div className="pl-3 text-slate-300">
-                          <span className="text-lime-300">"interests"</span>: <span className="text-emerald-300">["Fullstack", "Generative AI", "Healthcare Tech"]</span>
+                          <span className="text-lime-300">"focus"</span>: <span className="text-emerald-300">["Healthcare AI", "Fullstack", "Web Dev"]</span>
                         </div>
-                        <div className="text-slate-400">{"}"}</div>
-                      </div>
-
-                      <div className="pt-2 flex items-center justify-between text-[11px] text-slate-400">
-                        <span className="flex items-center gap-1 text-emerald-300">
-                          <svg className="w-3.5 h-3.5 text-lime-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
-                          </svg>
-                          <span>Ready for Impact</span>
-                        </span>
-                        <span className="font-mono text-emerald-400/90 animate-pulse">● Active session</span>
+                        <div>{"}"}</div>
                       </div>
                     </div>
-                  </div>
-
-                  <div className="absolute -bottom-4 -right-2 sm:-right-4 bg-[#0d1117]/90 border border-lime-400/40 backdrop-blur-md px-3.5 py-2 rounded-xl shadow-[0_0_15px_rgba(163,230,53,0.2)] flex items-center gap-2">
-                    <svg className="w-4 h-4 text-lime-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-                      <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
-                    </svg>
-                    <span className="text-xs font-mono font-medium text-lime-300">
-                      Ready to collaborate!
-                    </span>
                   </div>
 
                 </div>
@@ -631,7 +631,7 @@
       );
     }
 
-    // --- Interactive 3D Perspective Tilt Card ---
+    // --- Interactive 3D Tilt Project Card ---
     function ProjectCard({ project }) {
       const cardRef = useRef(null);
       const [tiltStyle, setTiltStyle] = useState({});
@@ -645,7 +645,6 @@
         const y = e.clientY - rect.top;
         const centerX = rect.width / 2;
         const centerY = rect.height / 2;
-
         const rotateX = ((y - centerY) / centerY) * -8;
         const rotateY = ((x - centerX) / centerX) * 8;
 
@@ -689,25 +688,16 @@
 
           <div>
             <div className="flex items-center justify-between mb-4">
-              <div className="flex items-center gap-2.5">
-                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-500/15 to-lime-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-400 group-hover:text-lime-300 group-hover:border-lime-400/50 transition-colors shadow-[0_0_15px_rgba(16,185,129,0.15)]">
-                  {project.icon}
-                </div>
-                <span className="text-[11px] font-mono uppercase tracking-wider text-emerald-400/90 font-medium px-2 py-0.5 rounded bg-emerald-950/40 border border-emerald-500/20">
-                  {project.subCategory}
-                </span>
-              </div>
+              <span className="text-[11px] font-mono uppercase tracking-wider text-emerald-400/90 font-medium px-2 py-0.5 rounded bg-emerald-950/40 border border-emerald-500/20">
+                {project.subCategory}
+              </span>
               <span className="text-xs font-mono text-slate-500 group-hover:text-emerald-400 transition-colors">
                 {project.id}
               </span>
             </div>
 
-            <h3 className="text-xl font-bold text-white group-hover:text-emerald-300 transition-colors flex items-center justify-between gap-2">
-              <span>{project.title}</span>
-              <svg className="w-4 h-4 text-slate-500 group-hover:text-lime-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-                <line x1="7" y1="17" x2="17" y2="7" />
-                <polyline points="7 7 17 7 17 17" />
-              </svg>
+            <h3 className="text-xl font-bold text-white group-hover:text-emerald-300 transition-colors">
+              {project.title}
             </h3>
 
             {project.tagline && (
@@ -718,7 +708,7 @@
 
             <div className="flex flex-wrap gap-1.5 mt-5">
               {project.tech.map((tag, idx) => (
-                <span key={idx} className="text-xs font-mono px-2.5 py-1 rounded-md bg-[#0d1117]/80 text-emerald-300 border border-emerald-500/20 group-hover:border-emerald-500/35 transition-colors">
+                <span key={idx} className="text-xs font-mono px-2.5 py-1 rounded-md bg-[#0d1117]/80 text-emerald-300 border border-emerald-500/20">
                   {tag}
                 </span>
               ))}
@@ -726,10 +716,10 @@
           </div>
 
           <div className="pt-6 mt-6 border-t border-emerald-500/15 flex items-center gap-3">
-            <a href={project.demoUrl} className="flex-1 inline-flex items-center justify-center gap-2 px-3.5 py-2.5 rounded-xl text-xs sm:text-sm font-bold text-[#0d1117] bg-gradient-to-r from-emerald-400 to-lime-400 hover:from-emerald-300 hover:to-lime-300 shadow-[0_0_15px_rgba(16,185,129,0.3)] hover:shadow-[0_0_22px_rgba(16,185,129,0.55)] transition-all duration-200 active:scale-95">
+            <a href={project.demoUrl} className="flex-1 inline-flex items-center justify-center gap-2 px-3.5 py-2.5 rounded-xl text-xs sm:text-sm font-bold text-[#0d1117] bg-gradient-to-r from-emerald-400 to-lime-400 hover:from-emerald-300 hover:to-lime-300 shadow-[0_0_15px_rgba(16,185,129,0.3)] transition-all">
               <span>Live Demo</span>
             </a>
-            <a href={project.githubUrl} className="inline-flex items-center justify-center gap-2 px-3.5 py-2.5 rounded-xl text-xs sm:text-sm font-semibold text-slate-300 hover:text-white bg-[#0d1117]/90 hover:bg-emerald-950/40 border border-emerald-500/30 hover:border-lime-400/60 transition-all duration-200 active:scale-95">
+            <a href={project.githubUrl} className="inline-flex items-center justify-center gap-2 px-3.5 py-2.5 rounded-xl text-xs sm:text-sm font-semibold text-slate-300 hover:text-white bg-[#0d1117]/90 hover:bg-emerald-950/40 border border-emerald-500/30 hover:border-lime-400/60 transition-all">
               <span>GitHub Code</span>
             </a>
           </div>
@@ -747,17 +737,11 @@
           id: '// 01',
           title: 'Patient case taking Application',
           tagline: 'MediKiosk // AI Clinical Triage System',
-          icon: (
-            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-              <path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z" />
-              <path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z" />
-            </svg>
-          ),
           subCategory: 'AI / Healthcare',
           categories: ['All', 'AI / ML', 'Web Apps'],
           description:
             'MediKiosk is an AI-powered, multilingual kiosk that lets patients describe their symptoms by voice or touch and scan old medical documents before they see the doctor. It turns all of that into a structured, ABHA-linked clinical history summary that the doctor can review and edit in seconds, with red-flag symptoms flagged for priority triage.',
-          tech: ['Voice AI', 'Multilingual LLM', 'ABHA API', 'Python', 'React', 'OCR'],
+          tech: ['Voice AI', 'Multilingual LLM', 'ABHA API', 'Python', 'React'],
           demoUrl: '#demo-medikiosk',
           githubUrl: '#github-medikiosk',
         },
@@ -765,16 +749,11 @@
           id: '// 02',
           title: 'ArthaMithra',
           tagline: 'Community Financial Empowerment App',
-          icon: (
-            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-              <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z" />
-            </svg>
-          ),
           subCategory: 'Social Impact / Fintech',
           categories: ['All', 'Web Apps', 'AI / ML'],
           description:
             'ArthaMitra is a Kannada-friendly mobile/web app for the urban slum community of Raagigudda (Vivekananda Colony), helping families track irregular daily income, expenses and savings goals. It also matches each household to the government schemes it qualifies for and shows the documents needed to apply, with short financial-literacy lessons and voice input for low-literacy users.',
-          tech: ['React', 'Tailwind CSS', 'Kannada NLP', 'Voice Input', 'Node.js', 'Gov API'],
+          tech: ['React', 'Tailwind CSS', 'Kannada NLP', 'Voice Input', 'Node.js'],
           demoUrl: '#demo-arthamithra',
           githubUrl: '#github-arthamithra',
         },
@@ -782,12 +761,6 @@
           id: '// 03',
           title: 'CampusShare: Student Notes Marketplace',
           tagline: 'Peer-to-Peer Academic Knowledge Exchange',
-          icon: (
-            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-              <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5Z" />
-              <path d="M6 6h10" /><path d="M6 10h10" />
-            </svg>
-          ),
           subCategory: 'Campus Tool / Web App',
           categories: ['All', 'Web Apps', 'Mini-Projects'],
           description:
@@ -803,9 +776,6 @@
       return (
         <section id="projects" className="relative z-10 py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto border-t border-emerald-500/15">
           <div className="flex flex-col items-center text-center space-y-3 mb-10">
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-950/40 border border-emerald-500/30 backdrop-blur-md">
-              <span className="text-xs font-mono uppercase tracking-widest text-emerald-300">Portfolio Showcase</span>
-            </div>
             <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-tight">
               Featured <span className="bg-gradient-to-r from-emerald-400 via-lime-300 to-emerald-300 bg-clip-text text-transparent">Projects</span>
             </h2>
@@ -837,39 +807,7 @@
       );
     }
 
-    // --- Skill Pill ---
-    function SkillPill({ skill }) {
-      const levelConfig = {
-        'Proficient': { dotColor: 'bg-emerald-400 shadow-[0_0_8px_#10b981]' },
-        'Familiar': { dotColor: 'bg-lime-400 shadow-[0_0_8px_#a3e635]' },
-        'Currently Learning': { dotColor: 'bg-cyan-400 shadow-[0_0_8px_#22d3ee] animate-pulse' },
-      };
-      const current = levelConfig[skill.level] || levelConfig['Familiar'];
-
-      return (
-        <div className="relative group/pill inline-flex">
-          <div className="flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl bg-[#0d1117]/85 backdrop-blur-md border border-emerald-500/20 text-slate-200 transition-all duration-200 cursor-pointer transform hover:scale-105 hover:-translate-y-0.5 hover:border-emerald-400/80 hover:shadow-[0_0_18px_rgba(16,185,129,0.38)]">
-            <span className="w-4 h-4 flex items-center justify-center text-emerald-400 group-hover/pill:text-lime-300 transition-colors">
-              {skill.icon}
-            </span>
-            <span className="text-xs sm:text-sm font-medium tracking-tight group-hover/pill:text-white transition-colors">
-              {skill.name}
-            </span>
-            <span className={`w-1.5 h-1.5 rounded-full ${current.dotColor}`} />
-          </div>
-
-          <div className="pointer-events-none absolute bottom-full left-1/2 -translate-x-1/2 mb-2 hidden group-hover/pill:flex flex-col items-center z-30 transition-all duration-200">
-            <div className="px-3 py-1 rounded-lg bg-[#070a0e] border border-emerald-500/40 shadow-[0_6px_20px_rgba(0,0,0,0.85)] text-[11px] font-mono whitespace-nowrap flex items-center gap-1.5">
-              <span className={`w-1.5 h-1.5 rounded-full ${current.dotColor}`} />
-              <span className="text-slate-300 font-medium">{skill.level}</span>
-            </div>
-            <div className="w-2 h-2 bg-[#070a0e] border-r border-b border-emerald-500/40 transform rotate-45 -mt-1" />
-          </div>
-        </div>
-      );
-    }
-
-    // --- Tech Stack & Skills ---
+    // --- Tech Stack & Skills with Tooltip ---
     function TechStackSkills() {
       const categories = [
         {
@@ -877,11 +815,11 @@
           title: 'Languages',
           tagline: 'Core Programming & Scripting',
           skills: [
-            { name: 'C++', icon: TechIcons.cpp, level: 'Proficient' },
-            { name: 'Python', icon: TechIcons.python, level: 'Proficient' },
-            { name: 'JavaScript', icon: TechIcons.javascript, level: 'Proficient' },
-            { name: 'Java', icon: TechIcons.cpp, level: 'Familiar' },
-            { name: 'TypeScript', icon: TechIcons.javascript, level: 'Familiar' },
+            { name: 'C++', level: 'Proficient' },
+            { name: 'Python', level: 'Proficient' },
+            { name: 'JavaScript', level: 'Proficient' },
+            { name: 'Java', level: 'Familiar' },
+            { name: 'TypeScript', level: 'Familiar' },
           ],
         },
         {
@@ -889,11 +827,11 @@
           title: 'Frameworks & Tools',
           tagline: 'Frontend, Backend & Dev Tooling',
           skills: [
-            { name: 'React', icon: TechIcons.react, level: 'Proficient' },
-            { name: 'Tailwind CSS', icon: TechIcons.tailwind, level: 'Proficient' },
-            { name: 'Node.js', icon: TechIcons.dsa, level: 'Familiar' },
-            { name: 'Git / GitHub', icon: TechIcons.git, level: 'Proficient' },
-            { name: 'Next.js', icon: TechIcons.react, level: 'Currently Learning' },
+            { name: 'React', level: 'Proficient' },
+            { name: 'Tailwind CSS', level: 'Proficient' },
+            { name: 'Node.js', level: 'Familiar' },
+            { name: 'Git / GitHub', level: 'Proficient' },
+            { name: 'Next.js', level: 'Currently Learning' },
           ],
         },
         {
@@ -901,23 +839,23 @@
           title: 'Core CS Concepts',
           tagline: 'Foundations & Engineering Principles',
           skills: [
-            { name: 'Data Structures & Algorithms', icon: TechIcons.dsa, level: 'Proficient' },
-            { name: 'OOP (C++ / Java)', icon: TechIcons.dsa, level: 'Proficient' },
-            { name: 'DBMS & SQL', icon: TechIcons.dsa, level: 'Familiar' },
-            { name: 'Operating Systems', icon: TechIcons.dsa, level: 'Familiar' },
-            { name: 'Computer Networks', icon: TechIcons.dsa, level: 'Familiar' },
+            { name: 'Data Structures & Algorithms', level: 'Proficient' },
+            { name: 'OOP (C++ / Java)', level: 'Proficient' },
+            { name: 'DBMS & SQL', level: 'Familiar' },
+            { name: 'Operating Systems', level: 'Familiar' },
+            { name: 'Computer Networks', level: 'Familiar' },
           ],
         },
       ];
 
       return (
         <section id="skills" className="relative z-10 py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto border-t border-emerald-500/15">
-          <div className="flex flex-col items-center text-center space-y-3 mb-12">
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-tight">
+          <div className="text-center space-y-3 mb-12">
+            <h2 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
               Tech Stack &amp; <span className="bg-gradient-to-r from-emerald-400 via-lime-300 to-emerald-300 bg-clip-text text-transparent">Skills</span>
             </h2>
-            <p className="text-slate-400 text-sm sm:text-base max-w-2xl">
-              A curated toolkit honed through coursework, competitive challenges, and real-world project builds.
+            <p className="text-slate-400 text-sm sm:text-base max-w-2xl mx-auto">
+              Hover over any skill badge to view my comfort level.
             </p>
           </div>
 
@@ -927,7 +865,19 @@
                 <h3 className="text-lg font-bold text-white mb-1">{cat.title}</h3>
                 <p className="text-xs text-slate-400 mb-5">{cat.tagline}</p>
                 <div className="flex flex-wrap gap-2.5">
-                  {cat.skills.map((s, idx) => <SkillPill key={idx} skill={s} />)}
+                  {cat.skills.map((s, idx) => (
+                    <div key={idx} className="relative group/pill inline-flex">
+                      <div className="flex items-center gap-2 px-3.5 py-2 rounded-xl bg-[#0d1117]/90 border border-emerald-500/20 text-slate-200 hover:scale-105 hover:border-emerald-400 hover:shadow-[0_0_15px_rgba(16,185,129,0.35)] transition-all cursor-pointer">
+                        <span className="text-xs sm:text-sm font-medium">{s.name}</span>
+                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 shadow-[0_0_6px_#10b981]" />
+                      </div>
+                      <div className="pointer-events-none absolute bottom-full left-1/2 -translate-x-1/2 mb-2 hidden group-hover/pill:flex flex-col items-center z-30">
+                        <div className="px-2.5 py-1 rounded bg-[#070a0e] border border-emerald-500/40 text-[11px] font-mono whitespace-nowrap text-slate-300">
+                          {s.level}
+                        </div>
+                      </div>
+                    </div>
+                  ))}
                 </div>
               </div>
             ))}
@@ -936,7 +886,7 @@
       );
     }
 
-    // --- NEW: Education & Campus Journey Component ---
+    // --- Education & Campus Journey ---
     function EducationJourney() {
       const milestones = [
         {
@@ -947,8 +897,6 @@
           subtitle: 'Internal College Competition Winner @ KSIT',
           description:
             'Got selected for the prestigious Smart India Hackathon (SIH) from the internal college competition at K S Institute of Technology. Led problem-solving brainstorming and pitch delivery to advance forward.',
-          highlight: 'Shortlisted for National Level',
-          active: true,
         },
         {
           year: '2026 // Ongoing',
@@ -958,8 +906,6 @@
           subtitle: 'Hospitality & Clinical Emergency Records',
           description:
             'Building a project focused on emergency patient triage — helping hospitals and clinics track patient histories, past records, and critical vitals seamlessly to facilitate instant intervention during golden-hour emergencies.',
-          highlight: 'ABHA-linked & Multilingual Voice Input',
-          active: true,
         },
         {
           year: '2023 — 2027',
@@ -968,256 +914,281 @@
           title: 'B.E. in Computer Science & Engineering',
           subtitle: 'K S Institute of Technology, Bangalore',
           description:
-            'Currently in 2nd Year CSE. Immersed in Data Structures, Object-Oriented Design, Operating Systems, and modern web application development. Consistently involved in campus hackathons and student tech circles.',
-          highlight: 'Bangalore, Karnataka, India',
-          active: false,
-        },
-      ];
-
-      const accomplishments = [
-        {
-          icon: '🏆',
-          title: '1st Place / SIH Nominee',
-          category: 'Hackathons',
-          description: 'Selected from internal KSIT hackathon evaluation for Smart India Hackathon nomination.',
-        },
-        {
-          icon: '⚡',
-          title: '150+ LeetCode Solved',
-          category: 'Problem Solving',
-          description: 'Strengthened algorithmic intuition across Arrays, Trees, Recursion, and DP in C++.',
-        },
-        {
-          icon: '👥',
-          title: 'Tech Club Organizer',
-          category: 'Leadership & Community',
-          description: 'Active contributor in KSIT student developer clubs, peer mentoring, and hackathon coordination.',
-        },
-        {
-          icon: '📜',
-          title: 'Full-Stack Certified',
-          category: 'Certifications',
-          description: 'Completed certifications in modern React, Tailwind CSS, REST APIs, and backend architectures.',
+            'Currently in 2nd Year CSE. Immersed in Data Structures, Object-Oriented Design, Operating Systems, and modern web application development. Consistently involved in campus hackathons.',
         },
       ];
 
       return (
         <section id="campus-life" className="relative z-10 py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto border-t border-emerald-500/15">
-          <div className="flex flex-col items-center text-center space-y-3 mb-16">
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-950/40 border border-emerald-500/30 backdrop-blur-md">
-              <span className="text-xs font-mono uppercase tracking-widest text-emerald-300">
-                College &amp; Campus Journey
-              </span>
-            </div>
-
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-tight">
-              Education &amp;{' '}
-              <span className="bg-gradient-to-r from-emerald-400 via-lime-300 to-emerald-300 bg-clip-text text-transparent drop-shadow-[0_0_20px_rgba(16,185,129,0.3)]">
-                Milestones
-              </span>
+          <div className="text-center space-y-3 mb-16">
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white">
+              Education &amp; <span className="bg-gradient-to-r from-emerald-400 via-lime-300 to-emerald-300 bg-clip-text text-transparent">Milestones</span>
             </h2>
-
-            <p className="text-slate-400 text-sm sm:text-base max-w-2xl">
+            <p className="text-slate-400 text-sm sm:text-base max-w-2xl mx-auto">
               Highlighting academic progress at K S Institute of Technology, hackathon competitions, and student community initiatives.
             </p>
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-start">
-            
-            {/* Left Column: Vertical Timeline with Illuminated Line */}
             <div className="lg:col-span-7">
-              <div className="flex items-center justify-between mb-8 pb-3 border-b border-emerald-500/15">
-                <h3 className="text-lg font-bold text-white tracking-tight flex items-center gap-2">
-                  <span>Academic &amp; Project Timeline</span>
-                </h3>
-                <span className="text-xs font-mono text-emerald-400/80">2023 — Present</span>
-              </div>
-
-              <div className="relative pl-8 sm:pl-10 space-y-8 sm:space-y-10">
-                {/* Illuminated Line */}
+              <div className="relative pl-8 sm:pl-10 space-y-8">
                 <div className="absolute left-[13px] sm:left-[17px] top-3 bottom-3 w-[2px] bg-gradient-to-b from-lime-400 via-emerald-400 to-emerald-500/20 shadow-[0_0_10px_#10b981]" />
-
                 {milestones.map((item, idx) => (
                   <div key={idx} className="relative group">
-                    {/* Glowing Nodal Dot */}
                     <div className="absolute -left-[30px] sm:-left-[34px] top-1.5 flex items-center justify-center">
                       <span className="relative flex h-5 w-5">
-                        {item.active && (
-                          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-lime-400 opacity-75" />
-                        )}
-                        <span className="relative inline-flex items-center justify-center rounded-full h-5 w-5 bg-[#0d1117] border-2 border-emerald-400 group-hover:border-lime-400 shadow-[0_0_12px_#10b981] transition-colors">
+                        <span className="relative inline-flex items-center justify-center rounded-full h-5 w-5 bg-[#0d1117] border-2 border-emerald-400 group-hover:border-lime-400 shadow-[0_0_12px_#10b981]">
                           <span className="w-1.5 h-1.5 rounded-full bg-lime-400" />
                         </span>
                       </span>
                     </div>
 
-                    {/* Milestone Card */}
-                    <div className="rounded-2xl bg-[#131922]/85 backdrop-blur-xl border border-emerald-500/20 group-hover:border-emerald-500/40 p-5 sm:p-6 transition-all duration-300 shadow-[0_4px_20px_rgba(0,0,0,0.5)] group-hover:shadow-[0_8px_30px_rgba(16,185,129,0.18)] group-hover:-translate-y-1">
-                      <div className="flex flex-wrap items-center justify-between gap-2 mb-2.5">
-                        <span className="text-xs font-mono font-bold text-emerald-400 bg-emerald-950/60 px-2.5 py-1 rounded-md border border-emerald-500/25">
-                          {item.year}
-                        </span>
-                        <span className={`text-[11px] font-mono px-2 py-0.5 rounded-full border ${item.badgeColor}`}>
-                          {item.badge}
-                        </span>
+                    <div className="rounded-2xl bg-[#131922]/85 border border-emerald-500/20 p-5 sm:p-6 transition-all hover:-translate-y-1 hover:border-emerald-400/60 shadow-[0_4px_20px_rgba(0,0,0,0.5)]">
+                      <div className="flex items-center justify-between mb-2">
+                        <span className="text-xs font-mono font-bold text-emerald-400 bg-emerald-950/60 px-2 py-0.5 rounded border border-emerald-500/30">{item.year}</span>
+                        <span className={`text-[11px] font-mono px-2 py-0.5 rounded ${item.badgeColor}`}>{item.badge}</span>
                       </div>
-
-                      <h4 className="text-base sm:text-lg font-bold text-white group-hover:text-emerald-300 transition-colors">
-                        {item.title}
-                      </h4>
-                      <p className="text-xs font-mono text-lime-400/90 font-medium mt-0.5">
-                        {item.subtitle}
-                      </p>
-
-                      <p className="text-slate-300 text-sm leading-relaxed mt-3">
-                        {item.description}
-                      </p>
-
-                      <div className="mt-4 pt-3 border-t border-emerald-500/10 flex items-center justify-between text-xs font-mono text-slate-400">
-                        <span className="inline-flex items-center gap-1.5 text-emerald-300">
-                          <span>✓</span>
-                          <span>{item.highlight}</span>
-                        </span>
-                        <span className="text-slate-500 group-hover:text-emerald-400 transition-colors">
-                          KSIT // CSE
-                        </span>
-                      </div>
+                      <h4 className="text-lg font-bold text-white">{item.title}</h4>
+                      <p className="text-xs font-mono text-lime-400 mt-0.5">{item.subtitle}</p>
+                      <p className="text-slate-300 text-sm mt-3">{item.description}</p>
                     </div>
                   </div>
                 ))}
               </div>
             </div>
 
-            {/* Right Column: 2x2 Accomplishment Badges */}
-            <div className="lg:col-span-5 flex flex-col justify-between">
-              <div className="flex items-center justify-between mb-8 pb-3 border-b border-emerald-500/15">
-                <h3 className="text-lg font-bold text-white tracking-tight">Accomplishment Badges</h3>
-                <span className="text-xs font-mono text-lime-400/80">Key Highlights</span>
+            <div className="lg:col-span-5 space-y-4">
+              <div className="rounded-2xl bg-[#131922]/85 border border-emerald-500/20 p-5 hover:border-lime-400/60 transition-all hover:-translate-y-1">
+                <span className="text-2xl">🏆</span>
+                <h4 className="text-sm font-bold text-white mt-2">1st Place / SIH Nominee</h4>
+                <p className="text-xs text-slate-300 mt-1">Selected from internal KSIT hackathon competition for national SIH evaluation.</p>
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                {accomplishments.map((badge, idx) => (
-                  <div
-                    key={idx}
-                    className="group relative rounded-2xl bg-[#131922]/85 backdrop-blur-xl border border-emerald-500/20 p-5 flex flex-col justify-between transition-all duration-300 shadow-[0_4px_20px_rgba(0,0,0,0.5)] hover:-translate-y-1 hover:border-lime-400/60 hover:shadow-[0_12px_28px_rgba(16,185,129,0.2)]"
-                  >
-                    <div>
-                      <div className="flex items-center justify-between mb-3">
-                        <span className="text-2xl">{badge.icon}</span>
-                        <span className="text-[10px] font-mono uppercase tracking-wider text-slate-400 px-2 py-0.5 rounded bg-emerald-950/40 border border-emerald-500/15">
-                          {badge.category}
-                        </span>
-                      </div>
-
-                      <h4 className="text-sm font-bold text-white group-hover:text-emerald-300 transition-colors">
-                        {badge.title}
-                      </h4>
-
-                      <p className="text-xs text-slate-300 leading-relaxed mt-2">
-                        {badge.description}
-                      </p>
-                    </div>
-
-                    <div className="pt-3 mt-4 border-t border-emerald-500/10 flex items-center justify-between text-[11px] font-mono text-emerald-400/80">
-                      <span>Verified</span>
-                      <span className="group-hover:translate-x-1 transition-transform">&rarr;</span>
-                    </div>
-                  </div>
-                ))}
+              <div className="rounded-2xl bg-[#131922]/85 border border-emerald-500/20 p-5 hover:border-lime-400/60 transition-all hover:-translate-y-1">
+                <span className="text-2xl">⚡</span>
+                <h4 className="text-sm font-bold text-white mt-2">150+ LeetCode Solved</h4>
+                <p className="text-xs text-slate-300 mt-1">Consistent problem solving across Arrays, Trees, Recursion, and DP in C++.</p>
               </div>
 
-              {/* College Card */}
-              <div className="mt-6 rounded-2xl bg-gradient-to-br from-emerald-950/40 via-[#131922]/80 to-[#0d1117] border border-emerald-500/25 p-5 flex items-center gap-4">
-                <div className="w-11 h-11 rounded-xl bg-emerald-500/20 border border-emerald-500/40 flex items-center justify-center text-xl shrink-0">
-                  🏛️
-                </div>
-                <div>
-                  <h5 className="text-sm font-bold text-white">K S Institute of Technology (KSIT)</h5>
-                  <p className="text-xs text-slate-400 mt-0.5">
-                    Affiliated with VTU, Approved by AICTE // Kanakapura Road, Bengaluru
-                  </p>
-                  <div className="mt-2 flex items-center gap-2 text-[11px] font-mono text-emerald-300">
-                    <span className="w-1.5 h-1.5 rounded-full bg-lime-400 animate-pulse" />
-                    <span>Class of 2027 // Active Student</span>
-                  </div>
-                </div>
+              <div className="rounded-2xl bg-[#131922]/85 border border-emerald-500/20 p-5 hover:border-lime-400/60 transition-all hover:-translate-y-1">
+                <span className="text-2xl">👥</span>
+                <h4 className="text-sm font-bold text-white mt-2">Tech Club Organizer</h4>
+                <p className="text-xs text-slate-300 mt-1">Active contributor in KSIT student developer clubs and peer mentoring.</p>
               </div>
 
+              <div className="rounded-2xl bg-[#131922]/85 border border-emerald-500/20 p-5 hover:border-lime-400/60 transition-all hover:-translate-y-1">
+                <span className="text-2xl">📜</span>
+                <h4 className="text-sm font-bold text-white mt-2">Full-Stack Certified</h4>
+                <p className="text-xs text-slate-300 mt-1">Hands-on certifications in modern React, Tailwind CSS, and REST APIs.</p>
+              </div>
             </div>
-
           </div>
         </section>
       );
     }
 
-    // --- Main App ---
+    // --- Interactive Magnetic Direct Link ---
+    function MagneticLink({ href, label, subtitle, isExternal = true }) {
+      const ref = useRef(null);
+      const [pos, setPos] = useState({ x: 0, y: 0 });
+
+      const onMouseMove = (e) => {
+        if (!ref.current) return;
+        const rect = ref.current.getBoundingClientRect();
+        const cx = rect.left + rect.width / 2;
+        const cy = rect.top + rect.height / 2;
+        setPos({ x: (e.clientX - cx) * 0.2, y: (e.clientY - cy) * 0.2 });
+      };
+
+      const onMouseLeave = () => setPos({ x: 0, y: 0 });
+
+      return (
+        <a
+          ref={ref}
+          href={href}
+          target={isExternal ? '_blank' : undefined}
+          rel={isExternal ? 'noopener noreferrer' : undefined}
+          onMouseMove={onMouseMove}
+          onMouseLeave={onMouseLeave}
+          style={{
+            transform: `translate3d(${pos.x}px, ${pos.y}px, 0)`,
+            transition: pos.x === 0 && pos.y === 0 ? 'transform 0.4s ease' : 'none',
+          }}
+          className="flex items-center justify-between p-4 rounded-2xl bg-[#131922]/90 border border-emerald-500/20 hover:border-lime-400/60 shadow-[0_4px_20px_rgba(0,0,0,0.5)] transition-colors"
+        >
+          <div>
+            <h4 className="text-sm font-bold text-white group-hover:text-emerald-300">{label}</h4>
+            <p className="text-xs font-mono text-slate-400 truncate max-w-[220px] sm:max-w-[280px]">{subtitle}</p>
+          </div>
+          <span className="text-emerald-400">&rarr;</span>
+        </a>
+      );
+    }
+
+    // --- Complete Contact Component ---
+    function Contact() {
+      const [formData, setFormData] = useState({ name: '', email: '', message: '' });
+      const [status, setStatus] = useState('idle');
+
+      const handleSubmit = (e) => {
+        e.preventDefault();
+        if (!formData.name || !formData.email || !formData.message) return;
+
+        setStatus('loading');
+        setTimeout(() => {
+          setStatus('success');
+          setFormData({ name: '', email: '', message: '' });
+          setTimeout(() => setStatus('idle'), 4000);
+        }, 1200);
+      };
+
+      return (
+        <section id="contact" className="relative z-10 py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto border-t border-emerald-500/15">
+          <div className="flex flex-col items-center text-center space-y-3 mb-16">
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-tight">
+              Let’s <span className="bg-gradient-to-r from-emerald-400 via-lime-300 to-emerald-300 bg-clip-text text-transparent">Collaborate &amp; Build</span>
+            </h2>
+            <p className="text-slate-300 text-sm sm:text-base max-w-2xl">
+              Open for summer internships, open-source projects, or tech chats. Drop me a message!
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-start max-w-6xl mx-auto">
+            {/* Direct Links */}
+            <div className="lg:col-span-5 space-y-4">
+              <div className="rounded-2xl bg-[#131922]/85 border border-emerald-500/25 p-6">
+                <h3 className="text-lg font-bold text-white mb-2">Connect Directly</h3>
+                <p className="text-xs text-slate-300 mb-6 leading-relaxed">
+                  Have an internship opportunity or want to collaborate on real-world projects? Let's connect!
+                </p>
+
+                <div className="space-y-3.5">
+                  <MagneticLink
+                    href="https://github.com/Shalini191075"
+                    label="GitHub"
+                    subtitle="github.com/Shalini191075"
+                  />
+                  <MagneticLink
+                    href="https://www.linkedin.com/in/shalini-s-683486379?utm_source=share_via&utm_content=profile&utm_medium=member_android"
+                    label="LinkedIn"
+                    subtitle="linkedin.com/in/shalini-s"
+                  />
+                  <MagneticLink
+                    href="mailto:shalini.v1910@gmail.com"
+                    label="Direct Email"
+                    subtitle="shalini.v1910@gmail.com"
+                    isExternal={false}
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* Interactive Form */}
+            <div className="lg:col-span-7">
+              <div className="rounded-2xl bg-[#131922]/90 border border-emerald-500/25 p-6 sm:p-8">
+                <h3 className="text-xl font-bold text-white mb-1">Send a Message</h3>
+                <p className="text-xs text-slate-400 mb-6">Drop your details below and I will get back to you shortly.</p>
+
+                <form onSubmit={handleSubmit} className="space-y-4">
+                  <div>
+                    <label className="block text-xs font-mono font-medium text-slate-300 mb-2">YOUR NAME *</label>
+                    <input
+                      type="text"
+                      required
+                      value={formData.name}
+                      onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                      placeholder="e.g. Alex Rivera"
+                      disabled={status === 'loading'}
+                      className="w-full px-4 py-3 rounded-xl bg-[#0d1117]/90 border border-emerald-500/25 focus:border-lime-400 focus:ring-1 focus:ring-lime-400 text-white placeholder-slate-500 text-sm outline-none"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-mono font-medium text-slate-300 mb-2">YOUR EMAIL *</label>
+                    <input
+                      type="email"
+                      required
+                      value={formData.email}
+                      onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                      placeholder="e.g. alex@company.com"
+                      disabled={status === 'loading'}
+                      className="w-full px-4 py-3 rounded-xl bg-[#0d1117]/90 border border-emerald-500/25 focus:border-lime-400 focus:ring-1 focus:ring-lime-400 text-white placeholder-slate-500 text-sm outline-none"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-mono font-medium text-slate-300 mb-2">YOUR MESSAGE *</label>
+                    <textarea
+                      required
+                      rows={4}
+                      value={formData.message}
+                      onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+                      placeholder="Hi Shalini, I'd love to chat about..."
+                      disabled={status === 'loading'}
+                      className="w-full px-4 py-3 rounded-xl bg-[#0d1117]/90 border border-emerald-500/25 focus:border-lime-400 focus:ring-1 focus:ring-lime-400 text-white placeholder-slate-500 text-sm outline-none resize-none"
+                    />
+                  </div>
+
+                  <button
+                    type="submit"
+                    disabled={status === 'loading' || status === 'success'}
+                    className={`w-full py-4 px-6 rounded-xl font-bold text-sm sm:text-base flex items-center justify-center gap-2.5 transition-all duration-300 shadow-[0_0_20px_rgba(16,185,129,0.35)] ${
+                      status === 'success'
+                        ? 'bg-gradient-to-r from-emerald-500 to-lime-500 text-[#0d1117] shadow-[0_0_30px_rgba(163,230,53,0.5)] cursor-default'
+                        : status === 'loading'
+                        ? 'bg-emerald-600 text-[#0d1117] cursor-wait opacity-90'
+                        : 'bg-gradient-to-r from-emerald-400 to-lime-400 hover:from-emerald-300 hover:to-lime-300 text-[#0d1117] hover:shadow-[0_0_35px_rgba(16,185,129,0.65)] hover:-translate-y-0.5 cursor-pointer'
+                    }`}
+                  >
+                    {status === 'loading' && (
+                      <React.Fragment>
+                        <svg className="animate-spin -ml-1 mr-2 h-5 w-5 text-[#0d1117]" fill="none" viewBox="0 0 24 24">
+                          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                        </svg>
+                        <span>Transmitting Message...</span>
+                      </React.Fragment>
+                    )}
+                    {status === 'success' && <span>Message Sent! 🚀</span>}
+                    {status === 'idle' && <span>Send Message</span>}
+                  </button>
+                </form>
+              </div>
+            </div>
+          </div>
+        </section>
+      );
+    }
+
+    // --- Footer Component ---
+    function Footer() {
+      return (
+        <footer className="relative z-10 border-t border-emerald-500/20 py-10 px-4 text-center bg-[#070a0e]/95 backdrop-blur-md">
+          <p className="text-xs sm:text-sm font-mono text-slate-300 tracking-wide">
+            Designed &amp; Engineered by <strong className="text-emerald-400 font-semibold">Shalini S</strong> • Class of 2029
+          </p>
+          <p className="text-[11px] font-mono text-emerald-500/60 mt-1">
+            Cyber-Emerald Edition • Bengaluru, India
+          </p>
+        </footer>
+      );
+    }
+
+    // --- Main Unified App ---
     function App() {
       return (
         <div className="relative min-h-screen bg-[#0d1117] text-slate-100 font-sans selection:bg-emerald-500 selection:text-black">
+          <CursorFollower />
           <MatrixDotCanvas />
           <Navbar />
           <main>
-            {/* 1. Opening Hero Intro Section */}
             <Hero />
-
-            {/* 2. Featured Projects Section directly below Intro */}
             <FeaturedProjects />
-
-            {/* 3. Interactive Tech Stack & Skills directly below Projects */}
             <TechStackSkills />
-
-            {/* 4. Education & Campus Journey directly below Skills */}
             <EducationJourney />
-
-            {/* 5. About Section */}
-            <section id="about" className="relative z-10 py-16 px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto border-t border-emerald-500/15">
-              <div className="flex items-center gap-3 mb-6">
-                <span className="p-2 rounded-lg bg-emerald-950/60 border border-emerald-500/30 text-lime-400">
-                  <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-                    <circle cx="12" cy="12" r="10" />
-                    <line x1="12" y1="16" x2="12" y2="12" />
-                    <line x1="12" y1="8" x2="12.01" y2="8" />
-                  </svg>
-                </span>
-                <h2 className="text-2xl font-bold text-white tracking-tight">About Me</h2>
-              </div>
-              <div className="bg-[#131922]/70 border border-emerald-500/20 rounded-2xl p-6 backdrop-blur-md">
-                <p className="text-slate-300 leading-relaxed">
-                  I am a 2nd year Computer Science student at <strong className="text-emerald-300">K S Institute of Technology</strong> with a relentless drive for building intuitive web applications and exploring the frontiers of artificial intelligence. When I am not debugging code, I actively participate in hackathons, collaborate with fellow student builders, and explore modern frontend architectures.
-                </p>
-              </div>
-            </section>
-
-            {/* 6. Contact Section */}
-            <section id="contact" className="relative z-10 py-20 px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto border-t border-emerald-500/15">
-              <div className="text-center space-y-4">
-                <span className="text-xs font-mono uppercase tracking-widest text-lime-400 bg-lime-950/30 border border-lime-500/30 px-3 py-1 rounded-full">
-                  Let's Connect
-                </span>
-                <h2 className="text-3xl font-extrabold text-white">Get In Touch</h2>
-                <p className="text-slate-300 max-w-xl mx-auto text-sm sm:text-base">
-                  I am currently looking for summer and fall internships. If you have an exciting project, an internship opportunity, or just want to chat about tech — my inbox is open!
-                </p>
-                <div className="pt-4 flex justify-center gap-4">
-                  <a
-                    href="mailto:shalini@example.com"
-                    className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-emerald-500 text-[#0d1117] font-bold hover:bg-lime-400 transition-colors shadow-[0_0_20px_rgba(16,185,129,0.4)]"
-                  >
-                    <span>Send Message</span>
-                  </a>
-                </div>
-              </div>
-            </section>
+            <Contact />
           </main>
-
-          <footer className="relative z-10 border-t border-emerald-500/20 py-8 px-4 text-center bg-[#070a0e]/90 backdrop-blur-md">
-            <p className="text-xs font-mono text-slate-400">
-              Designed & Built with <span className="text-emerald-400">React</span> & <span className="text-lime-400">Tailwind CSS</span> by <strong className="text-white">Shalini S</strong>
-            </p>
-            <p className="text-[11px] font-mono text-emerald-500/60 mt-1">
-              Cyber-Emerald Edition // KSIT Bangalore
-            </p>
-          </footer>
+          <Footer />
         </div>
       );
     }
